@@ -1164,13 +1164,13 @@ install_yaaw()
     # 默认配置
     filelink=$url_Yaaw
     name="Yaaw"
-    dirname="Yaaw-master"
+    dirname="yaaw-master"
     port=93
 
     # 运行安装程序
     web_installer
     echo "正在配置$name..."
-    chmod -R 777 /opt/wwwroot/$webdir
+    #chmod -R 777 /opt/wwwroot/$webdir
 
     # 添加到虚拟主机
     add_vhost $port $webdir
