@@ -794,7 +794,7 @@ case $input in
 10) install_dzzoffice;;
 11) install_yaaw;;
 0) exit;;
-*) echo "你输入的不是 0 ~ 10 之间的!"
+*) echo "你输入的不是 0 ~ 11 之间的!"
 break;;
 esac
 }
@@ -1395,7 +1395,7 @@ cat << EOF
 
 EOF
 
-read -p "输入你的选择[0-9]: " input
+read -p "输入你的选择[0-10]: " input
 case $input in
     1) install_onmp_ipk;;
 2) remove_onmp;;
@@ -1408,7 +1408,7 @@ case $input in
 9) set_swap;;
 10) redis;;
 0) exit;;
-*) echo "你输入的不是 0 ~ 8 之间的!"
+*) echo "你输入的不是 0 ~ 10 之间的!"
 exit;;
 esac 
 }
