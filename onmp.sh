@@ -1175,7 +1175,8 @@ install_yaaw()
     # 添加到虚拟主机
     add_vhost $port $webdir
     sed -e "s/.*\#php-fpm.*/    include \/opt\/etc\/nginx\/conf\/php-fpm.conf\;/g" -i /opt/etc/nginx/vhost/$webdir.conf
-    onmp restart >/dev/null 2>&1
+    #onmp restart >/dev/null 2>&1
+    onmp restart    
     echo "$name安装完成"
     echo "浏览器地址栏输入：$localhost:$port 即可访问"
 }
