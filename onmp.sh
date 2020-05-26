@@ -17,16 +17,16 @@ phpmod="php7-mod-calendar php7-mod-ctype php7-mod-curl php7-mod-dom php7-mod-exi
 url_phpMyAdmin="https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-languages.zip"
 
 # (2) WordPress（使用最广泛的CMS）
-url_WordPress="https://cn.wordpress.org/wordpress-4.9.4-zh_CN.zip"
+url_WordPress="https://cn.wordpress.org/latest-zh_CN.zip"
 
 # (3) Owncloud（经典的私有云）
-url_Owncloud="https://download.owncloud.org/community/owncloud-10.0.10.zip"
+url_Owncloud="https://download.owncloud.org/community/owncloud-10.4.1.zip"
 
 # (4) Nextcloud（Owncloud团队的新作，美观强大的个人云盘）
-url_Nextcloud="https://download.nextcloud.com/server/releases/nextcloud-13.0.6.zip"
+url_Nextcloud="https://download.nextcloud.com/server/releases/nextcloud-18.0.4.zip"
 
 # (5) h5ai（优秀的文件目录）
-url_h5ai="https://release.larsjung.de/h5ai/h5ai-0.29.0.zip"
+url_h5ai="https://release.larsjung.de/h5ai/h5ai-0.29.2.zip"
 
 # (6) Lychee（一个很好看，易于使用的Web相册）
 url_Lychee="https://github.com/electerious/Lychee/archive/master.zip"
@@ -38,13 +38,25 @@ url_Kodexplorer="http://static.kodcloud.com/update/download/kodexplorer4.40.zip"
 url_Typecho="http://typecho.org/downloads/1.1-17.10.30-release.tar.gz"
 
 # (9) Z-Blog (体积小，速度快的PHP博客程序)
-url_Zblog="https://update.zblogcn.com/zip/Z-BlogPHP_1_5_2_1935_Zero.zip"
+#url_Zblog="https://update.zblogcn.com/zip/Z-BlogPHP_1_5_2_1935_Zero.zip"
+url_Zblog="https://www.zblogcn.com/program/zblogphp16/Z-BlogPHP_1_6_0_2110_Valyria.zip"
 
 # (10) DzzOffice (开源办公平台)
 url_DzzOffice="https://codeload.github.com/zyx0814/dzzoffice/zip/master"
 
 # (11) Yaaw (Yaaw管理测试)
 url_Yaaw="https://github.com/ghostry/yaaw/archive/master.zip"
+
+# (12) Netdata（详细得惊人的服务器监控面板）
+url_Netdata="netdata"
+
+if [[ "armv7l" = $(uname -m) ]]; then
+    url_Netdata="http://pkg.entware.net/binaries/armv7/archive/netdata_1.8.0-1_armv7soft.ipk"
+elif [[ "mips" = $(uname -m) ]]; then
+    url_Netdata="http://pkg.entware.net/binaries/mipsel/archive/netdata_1.6.0-1_mipselsf.ipk"
+else
+    url_Netdata="http://pkg.entware.net/binaries/armv7/netdata_1.8.0-1_armv7soft.ipk"
+fi
 
 # 通用环境变量获取
 get_env()
@@ -778,9 +790,10 @@ cat << AAA
 (9) Z-Blog (体积小，速度快的PHP博客程序)
 (10) DzzOffice (开源办公平台)
 (11) Yaaw (Yaaw管理测试)
+(12) Netdata（详细得惊人的服务器监控面板）
 (0) 退出
 AAA
-read -p "输入你的选择[0-11]: " input
+read -p "输入你的选择[0-12]: " input
 case $input in
     1) install_phpmyadmin;;
 2) install_wordpress;;
@@ -793,8 +806,9 @@ case $input in
 9) install_zblog;;
 10) install_dzzoffice;;
 11) install_yaaw;;
+12) install_netdata;;
 0) exit;;
-*) echo "你输入的不是 0 ~ 11 之间的!"
+*) echo "你输入的不是 0 ~ 12 之间的!"
 break;;
 esac
 }
@@ -1167,6 +1181,61 @@ install_yaaw()
     echo "首次打开会要配置数据库信息"
     echo "地址：127.0.0.1 用户、密码你自己设置的或者默认是root 123456"
     echo "下面的可以不配置，然后下一步创建个用户就可以用了"
+}
+
+############# 安装Netdata ############
+install_netdata()
+{
+    echo "1. 安装"
+    echo "2. 卸载"
+    read -p "输入你的选择[1~2]: " input
+    case $input in
+        1 ) 
+opkg install $url_Netdata
+if [[ `opkg list-installed | grep netdata | wc -l` -eq 0 ]];then
+    echo "安装失败"
+    exit
+fi
+read -p "请输入端口(默认19999): " netdataport
+if [[ $netdataport ]]; then
+# 
+cat > "/opt/etc/nginx/vhost/netdata.conf" <<-\OOO
+upstream backend {
+    server 127.0.0.1:19999;
+    keepalive 64;
+}
+server {
+    listen 80;
+    server_name localhost;
+    location / {
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Server $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://backend;
+        proxy_http_version 1.1;
+        proxy_pass_request_headers on;
+        proxy_set_header Connection "keep-alive";
+        proxy_store off;
+    }
+}
+OOO
+sed -e "s/.*listen.*/    listen $netdataport\;/g" -i /opt/etc/nginx/vhost/netdata.conf
+else
+    netdataport=19999
+fi
+/opt/etc/init.d/S60netdata restart
+nginx -s reload
+echo "Netdata安装完成"
+echo "浏览器地址栏输入：$localhost:$netdataport 即可访问"
+;;
+2)
+killall netdata > /dev/null 2>&1
+opkg remove netdata
+rm -rf /opt/etc/nginx/vhost/netdata.conf
+nginx -s reload
+echo "卸载完成"
+;;
+esac
 }
 
 ############# 添加到虚拟主机 #############
