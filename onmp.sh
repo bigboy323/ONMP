@@ -43,6 +43,9 @@ url_Zblog="https://update.zblogcn.com/zip/Z-BlogPHP_1_5_2_1935_Zero.zip"
 # (10) DzzOffice (开源办公平台)
 url_DzzOffice="https://codeload.github.com/zyx0814/dzzoffice/zip/master"
 
+# (11) Yaaw (Yaaw管理测试)
+url_Yaaw="https://github.com/ghostry/yaaw/archive/master.zip"
+
 # 通用环境变量获取
 get_env()
 {
@@ -774,6 +777,7 @@ cat << AAA
 (8) Typecho (流畅的轻量级开源博客程序)
 (9) Z-Blog (体积小，速度快的PHP博客程序)
 (10) DzzOffice (开源办公平台)
+(11) Yaaw (Yaaw管理测试)
 (0) 退出
 AAA
 read -p "输入你的选择[0-11]: " input
@@ -788,6 +792,7 @@ case $input in
 8) install_typecho;;
 9) install_zblog;;
 10) install_dzzoffice;;
+11) install_yaaw;;
 0) exit;;
 *) echo "你输入的不是 0 ~ 10 之间的!"
 break;;
@@ -1137,6 +1142,31 @@ install_dzzoffice()
     echo "$name安装完成"
     echo "浏览器地址栏输入：$localhost:$port 即可访问"
     echo "DzzOffice应用市场中，某些应用无法自动安装的，请自行参看官网给的手动安装教程"
+}
+
+################ 安装Lychee ##############
+install_yaaw()
+{
+    # 默认配置
+    filelink=$url_Yaaw
+    name="Yaaw"
+    dirname="Yaaw-master"
+    port=93
+
+    # 运行安装程序
+    web_installer
+    echo "正在配置$name..."
+    chmod -R 777 /opt/wwwroot/$webdir/uploads/ /opt/wwwroot/$webdir/data/
+
+    # 添加到虚拟主机
+    add_vhost $port $webdir
+    sed -e "s/.*\#php-fpm.*/    include \/opt\/etc\/nginx\/conf\/php-fpm.conf\;/g" -i /opt/etc/nginx/vhost/$webdir.conf
+    onmp restart >/dev/null 2>&1
+    echo "$name安装完成"
+    echo "浏览器地址栏输入：$localhost:$port 即可访问"
+    echo "首次打开会要配置数据库信息"
+    echo "地址：127.0.0.1 用户、密码你自己设置的或者默认是root 123456"
+    echo "下面的可以不配置，然后下一步创建个用户就可以用了"
 }
 
 ############# 添加到虚拟主机 #############
