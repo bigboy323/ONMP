@@ -1170,7 +1170,7 @@ install_yaaw()
     # 运行安装程序
     web_installer
     echo "正在配置$name..."
-    chmod -R 777 /opt/wwwroot/$webdir/uploads/ /opt/wwwroot/$webdir/data/
+    chmod -R 777 /opt/wwwroot/$webdir
 
     # 添加到虚拟主机
     add_vhost $port $webdir
@@ -1178,9 +1178,6 @@ install_yaaw()
     onmp restart >/dev/null 2>&1
     echo "$name安装完成"
     echo "浏览器地址栏输入：$localhost:$port 即可访问"
-    echo "首次打开会要配置数据库信息"
-    echo "地址：127.0.0.1 用户、密码你自己设置的或者默认是root 123456"
-    echo "下面的可以不配置，然后下一步创建个用户就可以用了"
 }
 
 ############# 安装Netdata ############
