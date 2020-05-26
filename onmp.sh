@@ -1163,7 +1163,7 @@ install_yaaw()
 {
     # 默认配置
     filelink=$url_Yaaw
-    name="Yaaw"
+    name="yaaw"
     dirname="yaaw-master"
     port=93
 
