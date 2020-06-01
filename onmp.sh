@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # @Author: xzhih
 # @Date:   2017-07-29 06:10:54
 # @Last Modified by:   Fangshing87
@@ -600,7 +600,7 @@ rm -rf /opt/bin/onmp
 
 # 写入文件
 cat > "/opt/bin/onmp" <<-\EOF
-#!/bin/bash
+#!/bin/sh
 
 # 获取路由器IP
 localhost=$(ifconfig | grep "inet addr" | awk '{ print $2}' | awk -F: '{print $2}' | awk 'NR==1')
@@ -1434,7 +1434,7 @@ rm -rf /opt/bin/sqlbackup
 
 # 写入文件
 cat > "/opt/bin/sqlbackup" <<-\EOF
-#!/bin/bash
+#!/bin/sh
 /opt/bin/mysqldump -uusername -puserpasswd -A > /opt/backup/sql_backup_$(date +%Y%m%d%H).sql
 EOF
     
