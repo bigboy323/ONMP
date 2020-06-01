@@ -58,6 +58,9 @@ else
     url_Netdata="http://pkg.entware.net/binaries/armv7/netdata_1.8.0-1_armv7soft.ipk"
 fi
 
+# (13) Kodbox（新版可道云Kodbox原芒果云在线文档管理器）
+url_Kodexplorer="http://static.kodcloud.com/update/download/kodexplorer4.40.zip"
+
 # 通用环境变量获取
 get_env()
 {
@@ -791,9 +794,10 @@ cat << AAA
 (10) DzzOffice (开源办公平台)
 (11) Yaaw (Yaaw管理测试)
 (12) Netdata（详细得惊人的服务器监控面板）
+(13) Kodbox（新版可道云Kodbox原芒果云在线文档管理器）
 (0) 退出
 AAA
-read -p "输入你的选择[0-12]: " input
+read -p "输入你的选择[0-13]: " input
 case $input in
     1) install_phpmyadmin;;
 2) install_wordpress;;
@@ -807,8 +811,9 @@ case $input in
 10) install_dzzoffice;;
 11) install_yaaw;;
 12) install_netdata;;
+13) install_Kodbox;;
 0) exit;;
-*) echo "你输入的不是 0 ~ 12 之间的!"
+*) echo "你输入的不是 0 ~ 13 之间的!"
 break;;
 esac
 }
@@ -1158,7 +1163,7 @@ install_dzzoffice()
     echo "DzzOffice应用市场中，某些应用无法自动安装的，请自行参看官网给的手动安装教程"
 }
 
-################ 安装Lychee ##############
+################ 安装Yaaw ##############
 install_yaaw()
 {
     # 默认配置
@@ -1233,6 +1238,29 @@ nginx -s reload
 echo "卸载完成"
 ;;
 esac
+}
+
+############## 安装kodbox新版可道云原芒果云 ##########
+install_kodbox()
+{
+    # 默认配置
+    filelink=$url_Kodbox
+    name="Kodebox"
+    dirname="kodbox"
+    port=89
+    hookdir=$dirname
+
+    # 运行安装程序 
+    web_installer
+    echo "正在配置$name..."
+    chmod -R 777 /opt/wwwroot/$webdir
+
+    # 添加到虚拟主机
+    add_vhost $port $webdir
+    sed -e "s/.*\#php-fpm.*/    include \/opt\/etc\/nginx\/conf\/php-fpm.conf\;/g" -i /opt/etc/nginx/vhost/$webdir.conf
+    onmp restart >/dev/null 2>&1
+    echo "$name安装完成"
+    echo "浏览器地址栏输入：$localhost:$port 即可访问"
 }
 
 ############# 添加到虚拟主机 #############
