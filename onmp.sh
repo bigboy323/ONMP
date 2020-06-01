@@ -59,7 +59,7 @@ else
 fi
 
 # (13) Kodbox（新版可道云Kodbox原芒果云在线文档管理器）
-url_Kodexplorer="http://static.kodcloud.com/update/download/kodexplorer4.40.zip"
+url_Kodbox="http://static.kodcloud.com/update/download/kodbox.1.09.zip"
 
 # 通用环境变量获取
 get_env()
