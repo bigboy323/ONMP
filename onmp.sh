@@ -39,7 +39,7 @@ url_Typecho="http://typecho.org/downloads/1.1-17.10.30-release.tar.gz"
 
 # (9) Z-Blog (体积小，速度快的PHP博客程序)
 #url_Zblog="https://update.zblogcn.com/zip/Z-BlogPHP_1_5_2_1935_Zero.zip"
-url_Zblog="https://www.zblogcn.com/program/zblogphp16/Z-BlogPHP_1_6_0_2110_Valyria.zip"
+url_Zblog="https://update.zblogcn.com/zip/Z-BlogPHP_1_6_3_2110_Valyria.zip"
 
 # (10) DzzOffice (开源办公平台)
 url_DzzOffice="https://codeload.github.com/zyx0814/dzzoffice/zip/master"
