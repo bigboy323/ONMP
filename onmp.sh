@@ -811,7 +811,7 @@ case $input in
 10) install_dzzoffice;;
 11) install_yaaw;;
 12) install_netdata;;
-13) install_Kodbox;;
+13) install_kodbox;;
 0) exit;;
 *) echo "你输入的不是 0 ~ 13 之间的!"
 break;;
