@@ -51,11 +51,11 @@ url_Yaaw="https://github.com/ghostry/yaaw/archive/master.zip"
 url_Netdata="netdata"
 
 if [[ "armv7l" = $(uname -m) ]]; then
-    url_Netdata="http://pkg.entware.net/binaries/armv7/archive/netdata_1.8.0-1_armv7soft.ipk"
+    url_Netdata="http://bin.entware.net/armv7sf-k2.6/archive/netdata_1.19.0-1_armv7-2.6.ipk"
 elif [[ "mips" = $(uname -m) ]]; then
-    url_Netdata="http://pkg.entware.net/binaries/mipsel/archive/netdata_1.6.0-1_mipselsf.ipk"
+    url_Netdata="http://bin.entware.net/mipselsf-k3.4/archive/netdata_1.19.0-1_mipsel-3.4.ipk"
 else
-    url_Netdata="http://pkg.entware.net/binaries/armv7/netdata_1.8.0-1_armv7soft.ipk"
+    url_Netdata="http://bin.entware.net/armv7sf-k2.6/archive/netdata_1.19.0-1_armv7-2.6.ipk"
 fi
 
 # (13) Kodbox（新版可道云Kodbox原芒果云在线文档管理器）
